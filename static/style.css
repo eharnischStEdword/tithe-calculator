@@ -1,0 +1,194 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 40px;
+    font-size: 32px;
+}
+
+h2 {
+    color: #555;
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+.input-section {
+    margin-bottom: 40px;
+}
+
+.toggle-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.toggle-btn {
+    flex: 1;
+    padding: 12px;
+    border: 2px solid #667eea;
+    background: white;
+    color: #667eea;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.toggle-btn:hover {
+    background: #f0f4ff;
+}
+
+.toggle-btn.active {
+    background: #667eea;
+    color: white;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group.hidden {
+    display: none;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: #555;
+    font-weight: 500;
+}
+
+input[type="number"] {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+input[type="number"]:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.results-section {
+    background: #f8f9ff;
+    padding: 30px;
+    border-radius: 8px;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.current-percentage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.percentage-value {
+    font-size: 48px;
+    font-weight: 700;
+    color: #667eea;
+    margin-bottom: 8px;
+}
+
+.percentage-label {
+    color: #666;
+    font-size: 14px;
+}
+
+.increase-section {
+    margin-top: 40px;
+}
+
+#increaseOptions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.increase-option {
+    background: #f8f9ff;
+    border: 2px solid #e8ebff;
+    border-radius: 8px;
+    padding: 16px;
+    transition: all 0.3s ease;
+}
+
+.increase-option:hover {
+    border-color: #667eea;
+    transform: translateX(4px);
+}
+
+.increase-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.increase-label {
+    font-size: 18px;
+    font-weight: 700;
+    color: #667eea;
+}
+
+.increase-target {
+    font-size: 14px;
+    color: #666;
+}
+
+.increase-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.weekly-amount {
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+}
+
+.weekly-increase {
+    font-size: 14px;
+    color: #22c55e;
+    font-weight: 500;
+}
+
+@media (max-width: 640px) {
+    .container {
+        padding: 24px;
+    }
+    
+    h1 {
+        font-size: 24px;
+    }
+    
+    .percentage-value {
+        font-size: 36px;
+    }
+}

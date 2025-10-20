@@ -1,67 +1,52 @@
-# Tithe Calculator
+# Tithe Calculator for St. Edward Parish
 
-A simple and accurate calculator for computing tithes based on income.
-
-## Overview
-
-This project provides a tool to calculate tithes (typically 10% of income) for religious or charitable giving purposes. The calculator is designed to be user-friendly and accurate.
+A simple web calculator to help parishioners understand their giving as a percentage of income and visualize what increased giving would look like weekly.
 
 ## Features
 
-- Calculate tithe amounts based on gross or net income
-- Support for different income types (salary, hourly, freelance, etc.)
-- Multiple calculation methods (percentage-based, fixed amounts)
-- Clean and intuitive user interface
-- Mobile-responsive design
+- Enter annual giving statement total OR typical weekly offering
+- Calculate current giving percentage
+- See weekly amounts for 1-5% increases in giving
+- Clean, mobile-friendly interface
 
-## Getting Started
+## Tech Stack
 
-### Prerequisites
+- Flask (Python web framework)
+- Vanilla JavaScript
+- HTML/CSS
 
-- Node.js (version 14 or higher)
-- npm or yarn package manager
+## Local Development
 
-### Installation
-
-1. Clone the repository:
-```bash
-git clone https://github.com/yourusername/tithe-calculator.git
-cd tithe-calculator
-```
+1. Create virtual environment:
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
 
 2. Install dependencies:
-```bash
-npm install
-```
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-3. Start the development server:
-```bash
-npm start
-```
+3. Run locally:
+   ```bash
+   python app.py
+   ```
 
-4. Open your browser and navigate to `http://localhost:3000`
+4. Open browser to `http://localhost:5000`
 
-## Usage
+## Deployment to Render
 
-1. Enter your income amount
-2. Select the income type (gross or net)
-3. Choose your preferred calculation method
-4. View the calculated tithe amount
-5. Optionally save or export your calculations
+1. Create new GitHub repository and push code
+2. Create new Web Service on Render
+3. Connect your GitHub repository
+4. Render will auto-detect render.yaml and deploy
 
-## Contributing
+## Project Structure
 
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Support
-
-If you have any questions or need help, please open an issue on GitHub.
-
-## Acknowledgments
-
-- Inspired by biblical principles of tithing
-- Built with modern web technologies for accessibility and usability
+- `app.py` - Flask server
+- `templates/index.html` - Main calculator page
+- `static/script.js` - Calculator logic
+- `static/style.css` - Styling
+- `requirements.txt` - Python dependencies
+- `render.yaml` - Render deployment config

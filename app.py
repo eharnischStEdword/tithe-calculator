@@ -1,5 +1,6 @@
 from flask import Flask, render_template, jsonify
 from datetime import datetime
+import os
 
 app = Flask(__name__)
 
@@ -19,4 +20,5 @@ def status():
     }), 200
 
 if __name__ == '__main__':
-    app.run(debug=False, port=5001)
+    port = int(os.environ.get('PORT', 5001))
+    app.run(debug=False, host='0.0.0.0', port=port)

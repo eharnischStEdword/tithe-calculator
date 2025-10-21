@@ -54,12 +54,14 @@ function calculateTithe() {
         optionDiv.className = 'increase-option';
         optionDiv.innerHTML = `
             <div class="increase-left">
-                <div class="increase-title">If you increased by +${i}%</div>
-                <div class="increase-amount">Your offering would be $${newAmountInFreq.toFixed(2)}</div>
-                <div class="increase-delta">That's only $${increaseInFreq.toFixed(2)} more per ${frequencyLabel}</div>
+                <div class="increase-label">+${i}% INCREASE</div>
+                <div class="increase-amount">$${newAmountInFreq.toFixed(2)}</div>
+                <div class="increase-frequency">per ${frequencyLabel}</div>
+                <div class="increase-delta">+$${increaseInFreq.toFixed(2)} more than current</div>
             </div>
             <div class="increase-right">
-                <div class="increase-percent">That's ${newPercent.toFixed(1)}% of your annual income</div>
+                <div class="increase-percent">${newPercent.toFixed(1)}%</div>
+                <div class="increase-annual">of annual income</div>
             </div>
         `;
         increaseOptionsDiv.appendChild(optionDiv);

@@ -7,92 +7,101 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div class="calculator">
-        <div class="calculator-screen">
+    <main class="calculator" role="main">
+        <header class="calculator-screen">
+            <h1 class="sr-only">Tithe Calculator</h1>
         
-        <div class="input-section">
-            <div class="section-title">Your Giving</div>
+        <section class="input-section" aria-labelledby="giving-heading">
+            <h2 id="giving-heading" class="section-title">Your Giving</h2>
             
-            <div class="input-group">
+            <fieldset class="input-group">
+                <legend class="sr-only">Offering Amount and Frequency</legend>
                 <label for="offeringAmount">Offering Amount</label>
-                <input type="number" id="offeringAmount" placeholder="0.00" min="0" step="0.01">
-                <div class="radio-group">
-                    <input type="radio" id="offering-weekly" name="offeringFreq" value="52" checked>
+                <input type="number" id="offeringAmount" name="offeringAmount" placeholder="0.00" min="0" max="999999999" step="0.01" aria-describedby="offering-help" tabindex="1">
+                <div id="offering-help" class="sr-only">Enter the amount you typically give</div>
+                <fieldset class="radio-group" aria-labelledby="offering-freq-label">
+                    <legend id="offering-freq-label" class="sr-only">Offering Frequency</legend>
+                    <input type="radio" id="offering-weekly" name="offeringFreq" value="52" checked tabindex="2">
                     <label for="offering-weekly">Weekly</label>
-                    <input type="radio" id="offering-biweekly" name="offeringFreq" value="26">
+                    <input type="radio" id="offering-biweekly" name="offeringFreq" value="26" tabindex="3">
                     <label for="offering-biweekly">Bi-Weekly</label>
-                    <input type="radio" id="offering-monthly" name="offeringFreq" value="12">
+                    <input type="radio" id="offering-monthly" name="offeringFreq" value="12" tabindex="4">
                     <label for="offering-monthly">Monthly</label>
-                    <input type="radio" id="offering-annually" name="offeringFreq" value="1">
+                    <input type="radio" id="offering-annually" name="offeringFreq" value="1" tabindex="5">
                     <label for="offering-annually">Annually</label>
-                </div>
-            </div>
+                </fieldset>
+            </fieldset>
 
-            <div class="input-group">
+            <fieldset class="input-group">
+                <legend class="sr-only">Income Amount and Frequency</legend>
                 <label for="incomeAmount">Income Amount</label>
-                <input type="number" id="incomeAmount" placeholder="0.00" min="0" step="0.01">
-                <div class="radio-group">
-                    <input type="radio" id="income-weekly" name="incomeFreq" value="52" checked>
+                <input type="number" id="incomeAmount" name="incomeAmount" placeholder="0.00" min="0" max="999999999" step="0.01" aria-describedby="income-help" tabindex="6">
+                <div id="income-help" class="sr-only">Enter your household income amount</div>
+                <fieldset class="radio-group" aria-labelledby="income-freq-label">
+                    <legend id="income-freq-label" class="sr-only">Income Frequency</legend>
+                    <input type="radio" id="income-weekly" name="incomeFreq" value="52" checked tabindex="7">
                     <label for="income-weekly">Weekly</label>
-                    <input type="radio" id="income-biweekly" name="incomeFreq" value="26">
+                    <input type="radio" id="income-biweekly" name="incomeFreq" value="26" tabindex="8">
                     <label for="income-biweekly">Bi-Weekly</label>
-                    <input type="radio" id="income-monthly" name="incomeFreq" value="12">
+                    <input type="radio" id="income-monthly" name="incomeFreq" value="12" tabindex="9">
                     <label for="income-monthly">Monthly</label>
-                    <input type="radio" id="income-annually" name="incomeFreq" value="1">
+                    <input type="radio" id="income-annually" name="incomeFreq" value="1" tabindex="10">
                     <label for="income-annually">Annually</label>
-                </div>
-            </div>
-        </div>
+                </fieldset>
+            </fieldset>
+        </section>
         
-        <div class="summary-section">
-            <div class="section-title">Your Summary</div>
-            <div class="summary-card">
+        <section class="summary-section" aria-labelledby="summary-heading">
+            <h2 id="summary-heading" class="section-title">Your Summary</h2>
+            <div class="summary-card" role="region" aria-label="Financial summary">
                 <div class="summary-group">
-                    <div class="summary-header">Giving</div>
+                    <h3 class="summary-header">Giving</h3>
                     <div class="summary-item">
                         <span class="summary-label">Annual:</span>
-                        <span class="summary-value" id="annualGiving">$0</span>
+                        <span class="summary-value" id="annualGiving" aria-label="Annual giving amount">$0</span>
                     </div>
                     <div class="summary-item">
                         <span class="summary-label">Monthly:</span>
-                        <span class="summary-value" id="monthlyGiving">$0</span>
+                        <span class="summary-value" id="monthlyGiving" aria-label="Monthly giving amount">$0</span>
                     </div>
                     <div class="summary-item">
                         <span class="summary-label">Weekly:</span>
-                        <span class="summary-value" id="weeklyGiving">$0</span>
+                        <span class="summary-value" id="weeklyGiving" aria-label="Weekly giving amount">$0</span>
                     </div>
                 </div>
                 <div class="summary-group">
-                    <div class="summary-header">Income</div>
+                    <h3 class="summary-header">Income</h3>
                     <div class="summary-item">
                         <span class="summary-label">Annual:</span>
-                        <span class="summary-value" id="annualIncome">$0</span>
+                        <span class="summary-value" id="annualIncome" aria-label="Annual income amount">$0</span>
                     </div>
                     <div class="summary-item">
                         <span class="summary-label">Monthly:</span>
-                        <span class="summary-value" id="monthlyIncome">$0</span>
+                        <span class="summary-value" id="monthlyIncome" aria-label="Monthly income amount">$0</span>
                     </div>
                     <div class="summary-item">
                         <span class="summary-label">Weekly:</span>
-                        <span class="summary-value" id="weeklyIncome">$0</span>
+                        <span class="summary-value" id="weeklyIncome" aria-label="Weekly income amount">$0</span>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
         
-        <div class="results-section">
-            <div class="section-title">Current Giving</div>
-            <div class="current-percentage">
-                <span class="percentage-value" id="currentPercent">0%</span>
+        <section class="results-section" aria-labelledby="current-heading">
+            <h2 id="current-heading" class="section-title">Current Giving</h2>
+            <div class="validation-message" id="validationMessage" role="alert" aria-live="polite" style="display: none;"></div>
+            <div class="current-percentage" role="status" aria-live="polite">
+                <span class="percentage-value" id="currentPercent" aria-label="Current giving percentage">0%</span>
                 <span class="percentage-label">of household income</span>
             </div>
-        </div>
+        </section>
         
-        <div class="increase-section">
-            <div class="section-title">What if you increased your giving?</div>
-            <div id="increaseOptions"></div>
-        </div>
-    </div>
+        <section class="increase-section" aria-labelledby="increase-heading">
+            <h2 id="increase-heading" class="section-title">What if you increased your giving?</h2>
+            <div id="increaseOptions" role="region" aria-label="Increased giving options" aria-live="polite"></div>
+        </section>
+        </header>
+    </main>
     
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>

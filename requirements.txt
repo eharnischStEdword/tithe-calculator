@@ -1,2 +1,5 @@
+# Web framework for serving HTML templates and API endpoints
 Flask==3.0.0
+
+# Production WSGI server for Render deployment
 gunicorn==21.2.0

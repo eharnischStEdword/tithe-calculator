@@ -19,66 +19,191 @@ function getFrequencyLabel(frequency) {
     return labels[frequency] || 'period';
 }
 
+function validateInput(value) {
+    // Handle edge cases: negative numbers, NaN, Infinity, very large numbers
+    const num = parseFloat(value);
+    
+    if (isNaN(num) || !isFinite(num)) {
+        return { value: 0, isValid: false, message: 'Please enter a valid number' };
+    }
+    
+    // Prevent negative numbers
+    if (num < 0) {
+        return { value: 0, isValid: false, message: 'Amounts cannot be negative' };
+    }
+    
+    // Prevent extremely large numbers (over 999 million)
+    if (num > 999999999) {
+        return { value: 999999999, isValid: false, message: 'Amount is too large (max: $999,999,999)' };
+    }
+    
+    return { value: num, isValid: true, message: '' };
+}
+
+function showValidationMessage(message, isError = true) {
+    const messageDiv = document.getElementById('validationMessage');
+    if (!messageDiv) return;
+    
+    if (message) {
+        messageDiv.textContent = message;
+        messageDiv.className = isError ? 'validation-message' : 'validation-message info';
+        messageDiv.style.display = 'block';
+    } else {
+        messageDiv.style.display = 'none';
+    }
+}
+
+function setInputValidation(inputElement, isValid) {
+    if (!inputElement) return;
+    
+    if (isValid) {
+        inputElement.classList.remove('invalid-input');
+    } else {
+        inputElement.classList.add('invalid-input');
+    }
+}
+
 function calculateTithe() {
-    const offeringAmount = parseFloat(document.getElementById('offeringAmount').value) || 0;
-    const incomeAmount = parseFloat(document.getElementById('incomeAmount').value) || 0;
-    
-    const offeringFreq = parseFloat(document.querySelector('input[name="offeringFreq"]:checked').value);
-    const incomeFreq = parseFloat(document.querySelector('input[name="incomeFreq"]:checked').value);
-    
-    const annualOffering = offeringAmount * offeringFreq;
-    const annualIncome = incomeAmount * incomeFreq;
-    
-    updateSummary(annualOffering, annualIncome);
-    
-    if (annualIncome === 0) {
+    try {
+        // Get and validate input values
+        const offeringInput = document.getElementById('offeringAmount');
+        const incomeInput = document.getElementById('incomeAmount');
+        
+        const offeringValidation = validateInput(offeringInput.value);
+        const incomeValidation = validateInput(incomeInput.value);
+        
+        // Set visual validation feedback
+        setInputValidation(offeringInput, offeringValidation.isValid);
+        setInputValidation(incomeInput, incomeValidation.isValid);
+        
+        // Show validation messages
+        let validationMessage = '';
+        if (!offeringValidation.isValid) {
+            validationMessage = offeringValidation.message;
+        } else if (!incomeValidation.isValid) {
+            validationMessage = incomeValidation.message;
+        }
+        
+        // Handle special case: both inputs are 0
+        if (offeringValidation.value === 0 && incomeValidation.value === 0) {
+            validationMessage = 'Enter your offering and income amounts to see calculations';
+            showValidationMessage(validationMessage, false);
+        } else if (incomeValidation.value === 0) {
+            validationMessage = 'Enter your income to see percentage calculations';
+            showValidationMessage(validationMessage, false);
+        } else {
+            showValidationMessage(validationMessage);
+        }
+        
+        // Get frequency values with fallback
+        const offeringFreqElement = document.querySelector('input[name="offeringFreq"]:checked');
+        const incomeFreqElement = document.querySelector('input[name="incomeFreq"]:checked');
+        
+        if (!offeringFreqElement || !incomeFreqElement) {
+            console.error('Radio button elements not found');
+            return;
+        }
+        
+        const offeringFreq = parseFloat(offeringFreqElement.value) || 52;
+        const incomeFreq = parseFloat(incomeFreqElement.value) || 52;
+        
+        // Core calculations
+        const annualOffering = offeringValidation.value * offeringFreq;
+        const annualIncome = incomeValidation.value * incomeFreq;
+        
+        // Update summary section
+        updateSummary(annualOffering, annualIncome);
+        
+        // Handle division by zero case
+        if (annualIncome === 0) {
+            document.getElementById('currentPercent').textContent = '0%';
+            document.getElementById('increaseOptions').innerHTML = '';
+            return;
+        }
+        
+        // Calculate current percentage
+        const currentPercent = (annualOffering / annualIncome) * 100;
+        document.getElementById('currentPercent').textContent = currentPercent.toFixed(2) + '%';
+        
+        // Generate increase options
+        generateIncreaseOptions(currentPercent, annualIncome, offeringFreq, offeringValidation.value);
+        
+    } catch (error) {
+        console.error('Error in calculateTithe:', error);
+        // Fallback to safe state
         document.getElementById('currentPercent').textContent = '0%';
         document.getElementById('increaseOptions').innerHTML = '';
+        showValidationMessage('An error occurred. Please check your inputs.');
+    }
+}
+
+function generateIncreaseOptions(currentPercent, annualIncome, offeringFreq, offeringAmount) {
+    const frequencyLabel = getFrequencyLabel(offeringFreq);
+    const increaseOptionsDiv = document.getElementById('increaseOptions');
+    
+    if (!increaseOptionsDiv) {
+        console.error('Increase options div not found');
         return;
     }
     
-    const currentPercent = (annualOffering / annualIncome) * 100;
-    document.getElementById('currentPercent').textContent = currentPercent.toFixed(2) + '%';
-    
-    const frequencyLabel = getFrequencyLabel(offeringFreq);
-    const increaseOptionsDiv = document.getElementById('increaseOptions');
     increaseOptionsDiv.innerHTML = '';
     
     for (let i = 1; i <= 5; i++) {
-        const newPercent = currentPercent + i;
-        const newAnnualGiving = (newPercent / 100) * annualIncome;
-        const newAmountInFreq = newAnnualGiving / offeringFreq;
-        const increaseInFreq = newAmountInFreq - offeringAmount;
-        
-        const optionDiv = document.createElement('div');
-        optionDiv.className = 'increase-option';
-        optionDiv.innerHTML = `
-            <div class="increase-left">
-                <div class="increase-label">+${i}% INCREASE</div>
-                <div class="increase-amount">$${newAmountInFreq.toFixed(2)}</div>
-                <div class="increase-frequency">per ${frequencyLabel}</div>
-                <div class="increase-delta">+$${increaseInFreq.toFixed(2)} more than current</div>
-            </div>
-            <div class="increase-right">
-                <div class="increase-percent">${newPercent.toFixed(1)}%</div>
-                <div class="increase-annual">of annual income</div>
-            </div>
-        `;
-        increaseOptionsDiv.appendChild(optionDiv);
+        try {
+            const newPercent = currentPercent + i;
+            const newAnnualGiving = (newPercent / 100) * annualIncome;
+            const newAmountInFreq = newAnnualGiving / offeringFreq;
+            const increaseInFreq = newAmountInFreq - offeringAmount;
+            
+            const optionDiv = document.createElement('div');
+            optionDiv.className = 'increase-option';
+            optionDiv.innerHTML = `
+                <div class="increase-left">
+                    <div class="increase-label">+${i}% INCREASE</div>
+                    <div class="increase-amount">$${newAmountInFreq.toFixed(2)}</div>
+                    <div class="increase-frequency">per ${frequencyLabel}</div>
+                    <div class="increase-delta">+$${increaseInFreq.toFixed(2)} more than current</div>
+                </div>
+                <div class="increase-right">
+                    <div class="increase-percent">${newPercent.toFixed(1)}%</div>
+                    <div class="increase-annual">of annual income</div>
+                </div>
+            `;
+            increaseOptionsDiv.appendChild(optionDiv);
+        } catch (error) {
+            console.error(`Error generating increase option ${i}:`, error);
+        }
     }
 }
 
 function updateSummary(annualOffering, annualIncome) {
-    // Update giving summary
-    document.getElementById('annualGiving').textContent = '$' + annualOffering.toFixed(2);
-    document.getElementById('monthlyGiving').textContent = '$' + (annualOffering / 12).toFixed(2);
-    document.getElementById('weeklyGiving').textContent = '$' + (annualOffering / 52).toFixed(2);
-    
-    // Update income summary
-    document.getElementById('annualIncome').textContent = '$' + annualIncome.toFixed(2);
-    document.getElementById('monthlyIncome').textContent = '$' + (annualIncome / 12).toFixed(2);
-    document.getElementById('weeklyIncome').textContent = '$' + (annualIncome / 52).toFixed(2);
+    try {
+        // Update giving summary with error handling
+        const annualGivingEl = document.getElementById('annualGiving');
+        const monthlyGivingEl = document.getElementById('monthlyGiving');
+        const weeklyGivingEl = document.getElementById('weeklyGiving');
+        
+        if (annualGivingEl) annualGivingEl.textContent = '$' + annualOffering.toFixed(2);
+        if (monthlyGivingEl) monthlyGivingEl.textContent = '$' + (annualOffering / 12).toFixed(2);
+        if (weeklyGivingEl) weeklyGivingEl.textContent = '$' + (annualOffering / 52).toFixed(2);
+        
+        // Update income summary with error handling
+        const annualIncomeEl = document.getElementById('annualIncome');
+        const monthlyIncomeEl = document.getElementById('monthlyIncome');
+        const weeklyIncomeEl = document.getElementById('weeklyIncome');
+        
+        if (annualIncomeEl) annualIncomeEl.textContent = '$' + annualIncome.toFixed(2);
+        if (monthlyIncomeEl) monthlyIncomeEl.textContent = '$' + (annualIncome / 12).toFixed(2);
+        if (weeklyIncomeEl) weeklyIncomeEl.textContent = '$' + (annualIncome / 52).toFixed(2);
+        
+    } catch (error) {
+        console.error('Error updating summary:', error);
+    }
 }
 
-// Initial calculation
-calculateTithe();
+// Initial calculation with error handling
+try {
+    calculateTithe();
+} catch (error) {
+    console.error('Error in initial calculation:', error);
+}

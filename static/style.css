@@ -278,7 +278,7 @@ input[type="number"]:focus {
 }
 
 .increase-label {
-    font-size: 13px;
+    font-size: 18px;
     font-weight: bold;
     color: #7fd97f;
     text-transform: uppercase;
@@ -288,7 +288,7 @@ input[type="number"]:focus {
 }
 
 .increase-amount {
-    font-size: 64px;
+    font-size: 58px;
     font-weight: bold;
     color: #ffffff;
     font-family: 'Courier New', monospace;
@@ -302,14 +302,14 @@ input[type="number"]:focus {
 }
 
 .increase-frequency {
-    font-size: 15px;
+    font-size: 18px;
     color: #aaaaaa;
     font-weight: normal;
     margin-bottom: 8px;
 }
 
 .increase-delta {
-    font-size: 14px;
+    font-size: 18px;
     color: #7fd97f;
     font-weight: 500;
     opacity: 0.85;
@@ -361,7 +361,7 @@ input[type="number"]:focus {
 }
 
 .increase-annual {
-    font-size: 12px;
+    font-size: 16px;
     color: #7fd97f;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -434,21 +434,21 @@ input[type="number"]:focus {
     }
     
     .increase-label {
-        font-size: 11px;
+        font-size: 16px;
         margin-bottom: 6px;
     }
     
     .increase-amount {
-        font-size: 48px;
+        font-size: 44px;
     }
     
     .increase-frequency {
-        font-size: 13px;
+        font-size: 16px;
         margin-bottom: 6px;
     }
     
     .increase-delta {
-        font-size: 12px;
+        font-size: 16px;
     }
     
     .increase-right {
@@ -462,6 +462,6 @@ input[type="number"]:focus {
     }
     
     .increase-annual {
-        font-size: 11px;
+        font-size: 14px;
     }
 }

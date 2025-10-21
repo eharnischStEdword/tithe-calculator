@@ -3,21 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tithe Calculator - St. Edward Church</title>
+    <title>Tithe Calculator</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <div class="church-logo">
-                <h1>St. Edward Church</h1>
-                <p class="tagline">Through Love, Serve One Another</p>
-            </div>
-            <h2 class="page-title">Tithe Calculator</h2>
+        <div class="title-bar">
+            <span class="title-text">Tithe Calculator</span>
         </div>
+        <div class="calculator-body">
         
         <div class="input-section">
-            <h3>Your Giving</h3>
+            <div class="section-title">Your Giving</div>
             
             <div class="input-group">
                 <label for="offeringAmount">Offering Amount</label>
@@ -43,10 +40,10 @@
         </div>
         
         <div class="summary-section">
-            <h3>Your Summary</h3>
+            <div class="section-title">Your Summary</div>
             <div class="summary-card">
                 <div class="summary-group">
-                    <h4>Giving</h4>
+                    <div class="summary-header">Giving</div>
                     <div class="summary-item">
                         <span class="summary-label">Annual:</span>
                         <span class="summary-value" id="annualGiving">$0</span>
@@ -61,7 +58,7 @@
                     </div>
                 </div>
                 <div class="summary-group">
-                    <h4>Income</h4>
+                    <div class="summary-header">Income</div>
                     <div class="summary-item">
                         <span class="summary-label">Annual:</span>
                         <span class="summary-value" id="annualIncome">$0</span>
@@ -79,7 +76,7 @@
         </div>
         
         <div class="results-section">
-            <h3>Current Giving</h3>
+            <div class="section-title">Current Giving</div>
             <div class="current-percentage">
                 <span class="percentage-value" id="currentPercent">0%</span>
                 <span class="percentage-label">of household income</span>
@@ -87,8 +84,9 @@
         </div>
         
         <div class="increase-section">
-            <h3>What if you increased your giving?</h3>
+            <div class="section-title">What if you increased your giving?</div>
             <div id="increaseOptions"></div>
+        </div>
         </div>
     </div>
     

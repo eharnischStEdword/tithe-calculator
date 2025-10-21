@@ -17,14 +17,25 @@ function formatInputCurrency(value) {
 }
 
 function applyCurrencyFormat(inputElement) {
+    // For number inputs, we can't add $ or commas, so just ensure clean numeric input
     const rawValue = inputElement.value.replace(/[^\d.]/g, '');
-    const formatted = formatInputCurrency(rawValue);
-    inputElement.value = formatted ? '$' + formatted : '';
+    
+    // Prevent multiple decimal points
+    const parts = rawValue.split('.');
+    let cleanValue = parts[0];
+    if (parts.length > 1) {
+        cleanValue = parts[0] + '.' + parts[1].slice(0, 2); // Limit to 2 decimal places
+    }
+    
+    // Only update if the value actually changed to prevent cursor jumping
+    if (inputElement.value !== cleanValue) {
+        inputElement.value = cleanValue;
+    }
 }
 
 function getCurrencyValue(inputElement) {
-    // Extract numeric value from formatted currency string
-    const value = inputElement.value.replace(/[$,]/g, '');
+    // Extract numeric value from input (already clean for number inputs)
+    const value = inputElement.value.replace(/[^\d.]/g, '');
     return parseFloat(value) || 0;
 }
 

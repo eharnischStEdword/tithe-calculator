@@ -277,14 +277,6 @@ input[type="number"]:focus {
     font-weight: bold;
 }
 
-.comparison-text {
-    font-size: 18px;
-    color: #7fd97f;
-    font-style: italic;
-    margin-top: 8px;
-    text-align: center;
-}
-
 /* Mobile media query - 16px base font */
 @media (max-width: 640px) {
     body {

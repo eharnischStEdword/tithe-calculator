@@ -9,6 +9,16 @@ document.querySelectorAll('input[name="incomeFreq"]').forEach(radio => {
     radio.addEventListener('change', calculateTithe);
 });
 
+function getFrequencyLabel(frequency) {
+    const labels = {
+        52: 'week',
+        26: 'bi-weekly period',
+        12: 'month',
+        1: 'year'
+    };
+    return labels[frequency] || 'period';
+}
+
 function calculateTithe() {
     const offeringAmount = parseFloat(document.getElementById('offeringAmount').value) || 0;
     const incomeAmount = parseFloat(document.getElementById('incomeAmount').value) || 0;
@@ -19,7 +29,6 @@ function calculateTithe() {
     const annualOffering = offeringAmount * offeringFreq;
     const annualIncome = incomeAmount * incomeFreq;
     
-    // Update summary section
     updateSummary(annualOffering, annualIncome);
     
     if (annualIncome === 0) {
@@ -31,26 +40,26 @@ function calculateTithe() {
     const currentPercent = (annualOffering / annualIncome) * 100;
     document.getElementById('currentPercent').textContent = currentPercent.toFixed(2) + '%';
     
-    // Generate increase options
+    const frequencyLabel = getFrequencyLabel(offeringFreq);
     const increaseOptionsDiv = document.getElementById('increaseOptions');
     increaseOptionsDiv.innerHTML = '';
     
     for (let i = 1; i <= 5; i++) {
         const newPercent = currentPercent + i;
         const newAnnualGiving = (newPercent / 100) * annualIncome;
-        const newWeeklyGiving = newAnnualGiving / 52;
-        const weeklyIncrease = newWeeklyGiving - (annualOffering / 52);
+        const newAmountInFreq = newAnnualGiving / offeringFreq;
+        const increaseInFreq = newAmountInFreq - offeringAmount;
         
         const optionDiv = document.createElement('div');
         optionDiv.className = 'increase-option';
         optionDiv.innerHTML = `
-            <div class="increase-header">
-                <span class="increase-label">+${i}%</span>
-                <span class="increase-target">${newPercent.toFixed(2)}% total</span>
+            <div class="increase-left">
+                <div class="increase-title">If you increased by +${i}%</div>
+                <div class="increase-amount">Your offering would be $${newAmountInFreq.toFixed(2)}</div>
+                <div class="increase-delta">That's only $${increaseInFreq.toFixed(2)} more per ${frequencyLabel}</div>
             </div>
-            <div class="increase-details">
-                <span class="weekly-amount">$${newWeeklyGiving.toFixed(2)}/week</span>
-                <span class="weekly-increase">(+$${weeklyIncrease.toFixed(2)}/week)</span>
+            <div class="increase-right">
+                <div class="increase-percent">That's ${newPercent.toFixed(1)}% of your annual income</div>
             </div>
         `;
         increaseOptionsDiv.appendChild(optionDiv);

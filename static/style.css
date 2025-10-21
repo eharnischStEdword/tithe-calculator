@@ -228,6 +228,10 @@ input[type="number"]:focus {
     padding: 20px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     transition: all 0.1s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
 }
 
 .increase-option:hover {
@@ -240,40 +244,40 @@ input[type="number"]:focus {
     transform: translateY(0);
 }
 
-.increase-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
+.increase-left {
+    flex: 1;
 }
 
-.increase-label {
+.increase-right {
+    flex: 0 0 auto;
+    text-align: right;
+    display: flex;
+    align-items: center;
+}
+
+.increase-title {
     font-size: 20px;
     font-weight: bold;
-    color: #ffffff;
-}
-
-.increase-target {
-    font-size: 18px;
     color: #7fd97f;
+    margin-bottom: 8px;
 }
 
-.increase-details {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.weekly-amount {
+.increase-amount {
     font-size: 28px;
     font-weight: bold;
     color: #ffffff;
     font-family: 'Courier New', monospace;
+    margin-bottom: 8px;
 }
 
-.weekly-increase {
-    font-size: 22px;
+.increase-delta {
+    font-size: 18px;
     color: #7fd97f;
+}
+
+.increase-percent {
+    font-size: 22px;
+    color: #ffffff;
     font-weight: bold;
 }
 
@@ -334,15 +338,29 @@ input[type="number"]:focus {
         font-size: 18px;
     }
     
-    .increase-label {
+    .increase-option {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .increase-right {
+        text-align: left;
+        width: 100%;
+    }
+    
+    .increase-title {
         font-size: 18px;
     }
     
-    .weekly-amount {
+    .increase-amount {
         font-size: 24px;
     }
     
-    .weekly-increase {
+    .increase-delta {
+        font-size: 16px;
+    }
+    
+    .increase-percent {
         font-size: 20px;
     }
 }

@@ -17,7 +17,10 @@ function formatInputCurrency(value) {
 }
 
 function applyCurrencyFormat(inputElement) {
-    // For number inputs, we can't add $ or commas, so just ensure clean numeric input
+    // Get cursor position before formatting
+    const cursorPos = inputElement.selectionStart;
+    
+    // Remove non-numeric characters except decimal point
     const rawValue = inputElement.value.replace(/[^\d.]/g, '');
     
     // Prevent multiple decimal points
@@ -27,15 +30,25 @@ function applyCurrencyFormat(inputElement) {
         cleanValue = parts[0] + '.' + parts[1].slice(0, 2); // Limit to 2 decimal places
     }
     
-    // Only update if the value actually changed to prevent cursor jumping
-    if (inputElement.value !== cleanValue) {
-        inputElement.value = cleanValue;
+    // Format with commas
+    const formatted = cleanValue.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    
+    // Add dollar sign
+    const finalValue = formatted ? '$' + formatted : '';
+    
+    // Only update if the value actually changed
+    if (inputElement.value !== finalValue) {
+        inputElement.value = finalValue;
+        
+        // Restore cursor position (adjust for added characters)
+        const newCursorPos = Math.min(cursorPos + (finalValue.length - inputElement.value.length), finalValue.length);
+        inputElement.setSelectionRange(newCursorPos, newCursorPos);
     }
 }
 
 function getCurrencyValue(inputElement) {
-    // Extract numeric value from input (already clean for number inputs)
-    const value = inputElement.value.replace(/[^\d.]/g, '');
+    // Extract numeric value from formatted currency string
+    const value = inputElement.value.replace(/[$,]/g, '');
     return parseFloat(value) || 0;
 }
 

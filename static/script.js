@@ -9,6 +9,13 @@ document.querySelectorAll('input[name="incomeFreq"]').forEach(radio => {
     radio.addEventListener('change', calculateTithe);
 });
 
+function formatCurrency(value) {
+    return value.toLocaleString('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
+}
+
 function getFrequencyLabel(frequency) {
     const labels = {
         52: 'week',
@@ -20,24 +27,29 @@ function getFrequencyLabel(frequency) {
 }
 
 function validateInput(value) {
+    // Handle empty input as valid but flagged
+    if (value === '' || value === null || value === undefined) {
+        return { value: 0, isValid: true, message: '', isEmpty: true };
+    }
+    
     // Handle edge cases: negative numbers, NaN, Infinity, very large numbers
     const num = parseFloat(value);
     
     if (isNaN(num) || !isFinite(num)) {
-        return { value: 0, isValid: false, message: 'Please enter a valid number' };
+        return { value: 0, isValid: false, message: 'Please enter a valid number', isEmpty: false };
     }
     
     // Prevent negative numbers
     if (num < 0) {
-        return { value: 0, isValid: false, message: 'Amounts cannot be negative' };
+        return { value: 0, isValid: false, message: 'Amounts cannot be negative', isEmpty: false };
     }
     
     // Prevent extremely large numbers (over 999 million)
     if (num > 999999999) {
-        return { value: 999999999, isValid: false, message: 'Amount is too large (max: $999,999,999)' };
+        return { value: 999999999, isValid: false, message: 'Amount is too large (max: $999,999,999)', isEmpty: false };
     }
     
-    return { value: num, isValid: true, message: '' };
+    return { value: num, isValid: true, message: '', isEmpty: false };
 }
 
 function showValidationMessage(message, isError = true) {
@@ -78,9 +90,9 @@ function calculateTithe() {
         
         // Show validation messages
         let validationMessage = '';
-        if (!offeringValidation.isValid) {
+        if (!offeringValidation.isValid && !offeringValidation.isEmpty) {
             validationMessage = offeringValidation.message;
-        } else if (!incomeValidation.isValid) {
+        } else if (!incomeValidation.isValid && !incomeValidation.isEmpty) {
             validationMessage = incomeValidation.message;
         }
         
@@ -160,9 +172,9 @@ function generateIncreaseOptions(currentPercent, annualIncome, offeringFreq, off
             optionDiv.innerHTML = `
                 <div class="increase-left">
                     <div class="increase-label">+${i}% INCREASE</div>
-                    <div class="increase-amount">$${newAmountInFreq.toFixed(2)}</div>
+                    <div class="increase-amount">$${formatCurrency(newAmountInFreq)}</div>
                     <div class="increase-frequency">per ${frequencyLabel}</div>
-                    <div class="increase-delta">+$${increaseInFreq.toFixed(2)} more than current</div>
+                    <div class="increase-delta">+$${formatCurrency(increaseInFreq)} more than current</div>
                 </div>
                 <div class="increase-right">
                     <div class="increase-percent">${newPercent.toFixed(1)}%</div>
@@ -183,18 +195,18 @@ function updateSummary(annualOffering, annualIncome) {
         const monthlyGivingEl = document.getElementById('monthlyGiving');
         const weeklyGivingEl = document.getElementById('weeklyGiving');
         
-        if (annualGivingEl) annualGivingEl.textContent = '$' + annualOffering.toFixed(2);
-        if (monthlyGivingEl) monthlyGivingEl.textContent = '$' + (annualOffering / 12).toFixed(2);
-        if (weeklyGivingEl) weeklyGivingEl.textContent = '$' + (annualOffering / 52).toFixed(2);
+        if (annualGivingEl) annualGivingEl.textContent = '$' + formatCurrency(annualOffering);
+        if (monthlyGivingEl) monthlyGivingEl.textContent = '$' + formatCurrency(annualOffering / 12);
+        if (weeklyGivingEl) weeklyGivingEl.textContent = '$' + formatCurrency(annualOffering / 52);
         
         // Update income summary with error handling
         const annualIncomeEl = document.getElementById('annualIncome');
         const monthlyIncomeEl = document.getElementById('monthlyIncome');
         const weeklyIncomeEl = document.getElementById('weeklyIncome');
         
-        if (annualIncomeEl) annualIncomeEl.textContent = '$' + annualIncome.toFixed(2);
-        if (monthlyIncomeEl) monthlyIncomeEl.textContent = '$' + (annualIncome / 12).toFixed(2);
-        if (weeklyIncomeEl) weeklyIncomeEl.textContent = '$' + (annualIncome / 52).toFixed(2);
+        if (annualIncomeEl) annualIncomeEl.textContent = '$' + formatCurrency(annualIncome);
+        if (monthlyIncomeEl) monthlyIncomeEl.textContent = '$' + formatCurrency(annualIncome / 12);
+        if (weeklyIncomeEl) weeklyIncomeEl.textContent = '$' + formatCurrency(annualIncome / 52);
         
     } catch (error) {
         console.error('Error updating summary:', error);

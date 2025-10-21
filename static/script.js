@@ -1,5 +1,43 @@
-document.getElementById('offeringAmount').addEventListener('input', calculateTithe);
-document.getElementById('incomeAmount').addEventListener('input', calculateTithe);
+// Currency formatting for input fields
+function formatInputCurrency(value) {
+    // Remove non-numeric characters except decimal point
+    const numericValue = value.replace(/[^\d.]/g, '');
+    
+    // Prevent multiple decimal points
+    const parts = numericValue.split('.');
+    let formatted = parts[0];
+    if (parts.length > 1) {
+        formatted = parts[0] + '.' + parts[1].slice(0, 2); // Limit to 2 decimal places
+    }
+    
+    // Add commas for thousands
+    formatted = formatted.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    
+    return formatted;
+}
+
+function applyCurrencyFormat(inputElement) {
+    const rawValue = inputElement.value.replace(/[^\d.]/g, '');
+    const formatted = formatInputCurrency(rawValue);
+    inputElement.value = formatted ? '$' + formatted : '';
+}
+
+function getCurrencyValue(inputElement) {
+    // Extract numeric value from formatted currency string
+    const value = inputElement.value.replace(/[$,]/g, '');
+    return parseFloat(value) || 0;
+}
+
+// Add input event listeners for real-time formatting
+document.getElementById('offeringAmount').addEventListener('input', function(e) {
+    applyCurrencyFormat(e.target);
+    calculateTithe();
+});
+
+document.getElementById('incomeAmount').addEventListener('input', function(e) {
+    applyCurrencyFormat(e.target);
+    calculateTithe();
+});
 
 // Add listeners to all radio buttons
 document.querySelectorAll('input[name="offeringFreq"]').forEach(radio => {
@@ -33,7 +71,9 @@ function validateInput(value) {
     }
     
     // Handle edge cases: negative numbers, NaN, Infinity, very large numbers
-    const num = parseFloat(value);
+    // Remove currency formatting if present
+    const cleanValue = typeof value === 'string' ? value.replace(/[$,]/g, '') : value;
+    const num = parseFloat(cleanValue);
     
     if (isNaN(num) || !isFinite(num)) {
         return { value: 0, isValid: false, message: 'Please enter a valid number', isEmpty: false };
@@ -81,8 +121,8 @@ function calculateTithe() {
         const offeringInput = document.getElementById('offeringAmount');
         const incomeInput = document.getElementById('incomeAmount');
         
-        const offeringValidation = validateInput(offeringInput.value);
-        const incomeValidation = validateInput(incomeInput.value);
+        const offeringValidation = validateInput(getCurrencyValue(offeringInput));
+        const incomeValidation = validateInput(getCurrencyValue(incomeInput));
         
         // Set visual validation feedback
         setInputValidation(offeringInput, offeringValidation.isValid);
@@ -138,7 +178,7 @@ function calculateTithe() {
         document.getElementById('currentPercent').textContent = currentPercent.toFixed(2) + '%';
         
         // Generate increase options
-        generateIncreaseOptions(currentPercent, annualIncome, offeringFreq, offeringValidation.value);
+        generateIncreaseOptions(currentPercent, annualIncome, offeringFreq, offeringValidation);
         
     } catch (error) {
         console.error('Error in calculateTithe:', error);
@@ -149,7 +189,7 @@ function calculateTithe() {
     }
 }
 
-function generateIncreaseOptions(currentPercent, annualIncome, offeringFreq, offeringAmount) {
+function generateIncreaseOptions(currentPercent, annualIncome, offeringFreq, offeringValidation) {
     const frequencyLabel = getFrequencyLabel(offeringFreq);
     const increaseOptionsDiv = document.getElementById('increaseOptions');
     
@@ -165,7 +205,7 @@ function generateIncreaseOptions(currentPercent, annualIncome, offeringFreq, off
             const newPercent = currentPercent + i;
             const newAnnualGiving = (newPercent / 100) * annualIncome;
             const newAmountInFreq = newAnnualGiving / offeringFreq;
-            const increaseInFreq = newAmountInFreq - offeringAmount;
+            const increaseInFreq = newAmountInFreq - offeringValidation.value;
             
             const optionDiv = document.createElement('div');
             optionDiv.className = 'increase-option';

@@ -1,14 +1,14 @@
 // Comparison tiers for practical comparisons
 const comparisonTiers = {
-    5: ["A specialty coffee", "A breakfast sandwich", "A craft beer"],
-    10: ["A fast food meal", "A lunch special", "Two gallons of milk"],
-    15: ["A Chipotle meal", "A large pizza", "Takeout lunch"],
-    20: ["A movie ticket", "A paperback book", "A tank fill-up (partial)"],
-    25: ["A month of Netflix", "A bouquet of flowers", "Premium car wash"],
-    30: ["Half a tank of gas", "A basic haircut", "Phone data add-on"],
-    35: ["Dinner at a casual restaurant", "A concert lawn ticket", "Kitchen gadget"],
-    40: ["A nice restaurant meal", "Monthly gym membership", "Portion of electric bill"],
-    45: ["Family dinner out", "Date night", "Partial week of groceries"]
+    5: ["Coffee from drive-thru", "Chick-fil-A cookie", "McDonald's breakfast sandwich"],
+    10: ["Chick-fil-A meal", "Target impulse buy", "Starbucks latte"],
+    15: ["Movie ticket", "Panera meal", "Uber short ride"],
+    20: ["Chain restaurant entrée", "Two Chick-fil-A meals", "Breakfast for two at Cracker Barrel"],
+    25: ["Sunday brunch for two after Mass", "Family ice cream outing", "Movie date (tickets + snack)"],
+    30: ["Haircut at Great Clips", "Casual dinner for one", "Kids' trampoline park visit"],
+    35: ["Brunch for two with coffee", "Family bowling afternoon", "Dinner at O'Charley's"],
+    40: ["Dinner at Cracker Barrel for two", "Nashville Sounds game tickets", "Family movie night out"],
+    45: ["Week of morning drive-thru coffees", "Nice family dinner at Texas Roadhouse", "Month of kids' swimming"]
 };
 
 document.getElementById('offeringAmount').addEventListener('input', calculateTithe);

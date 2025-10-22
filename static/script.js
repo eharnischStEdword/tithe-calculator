@@ -17,11 +17,13 @@ function formatInputCurrency(value) {
 }
 
 function applyCurrencyFormat(inputElement) {
-    // Get cursor position before formatting
+    // Get cursor position and old value before formatting
     const cursorPos = inputElement.selectionStart;
+    const oldValue = inputElement.value;
+    const oldLength = oldValue.length;
     
     // Remove non-numeric characters except decimal point
-    const rawValue = inputElement.value.replace(/[^\d.]/g, '');
+    const rawValue = oldValue.replace(/[^\d.]/g, '');
     
     // Prevent multiple decimal points
     const parts = rawValue.split('.');
@@ -37,11 +39,12 @@ function applyCurrencyFormat(inputElement) {
     const finalValue = formatted ? '$' + formatted : '';
     
     // Only update if the value actually changed
-    if (inputElement.value !== finalValue) {
+    if (oldValue !== finalValue) {
         inputElement.value = finalValue;
         
-        // Restore cursor position (adjust for added characters)
-        const newCursorPos = Math.min(cursorPos + (finalValue.length - inputElement.value.length), finalValue.length);
+        // Adjust cursor position for added/removed characters
+        const lengthDiff = finalValue.length - oldLength;
+        const newCursorPos = Math.max(1, Math.min(cursorPos + lengthDiff, finalValue.length));
         inputElement.setSelectionRange(newCursorPos, newCursorPos);
     }
 }
